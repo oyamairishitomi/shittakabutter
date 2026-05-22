@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>シッタカブッター - register</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #080c08;
+      color: #a0c8a0;
+      font-family: 'Courier New', 'Osaka-Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 390px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand-en {
+      font-size: 16px;
+      color: #4caf50;
+      letter-spacing: 0.1em;
+    }
+    .brand-en::before { content: '> '; color: #2d5a2d; }
+
+    .brand-ja {
+      font-size: 12px;
+      color: #5a8a5a;
+      margin-top: 4px;
+      font-family: -apple-system, 'Hiragino Sans', sans-serif;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      color: #4caf50;
+      font-weight: normal;
+      letter-spacing: 0.1em;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #1a2e1a;
+    }
+    .header h1::before { content: '> '; color: #2d5a2d; }
+
+    .form-area {
+      background: #0a0f0a;
+      border: 1px solid #1a2e1a;
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      color: #4caf50;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .form-label::before { content: '> '; color: #2d5a2d; }
+
+    .form-input {
+      width: 100%;
+      background: #080c08;
+      border: 1px solid #1a2e1a;
+      border-radius: 3px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #88d488;
+      outline: none;
+    }
+    .form-input:focus { border-color: #2d5a2d; }
+    .form-input::placeholder { color: #1e3a1e; }
+
+    .error {
+      font-size: 12px;
+      color: #ef4444;
+      padding: 10px 14px;
+      border: 1px solid #3a1a1a;
+      border-radius: 3px;
+      background: #0f0808;
+    }
+    .error::before { content: '! '; }
+
+    .consent-area {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border: 1px solid #1a2e1a;
+      border-radius: 3px;
+    }
+
+    .consent-area input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: #4caf50;
+      flex-shrink: 0;
+    }
+
+    .consent-area label {
+      font-size: 12px;
+      color: #5a8a5a;
+      line-height: 1.6;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #0d1a0d;
+      border: 1px solid #2d5a2d;
+      border-radius: 3px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #4caf50;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      text-align: left;
+    }
+    .btn-submit::before { content: '$ '; color: #2d5a2d; }
+    .btn-submit:hover { background: #111f11; }
+
+    .login-link {
+      text-align: center;
+      font-size: 12px;
+      color: #3a5a3a;
+    }
+    .login-link a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+    .login-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="brand-en">shittakabutter</div>
+      <div class="brand-ja">シッタカブッター</div>
+      <h1>新規登録</h1>
+    </div>
+
+    <!-- エラー例 -->
+    <!-- <div class="error">パスワードは8文字以上で入力してください。</div> -->
+
+    <div class="form-area">
+      <div>
+        <label class="form-label">name</label>
+        <input class="form-input" type="text" placeholder="山田 太郎">
+      </div>
+      <div>
+        <label class="form-label">email</label>
+        <input class="form-input" type="text" placeholder="you@example.com">
+      </div>
+      <div>
+        <label class="form-label">password</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <div>
+        <label class="form-label">password (確認)</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <div class="consent-area">
+        <input type="checkbox" id="consent">
+        <label for="consent">このサービスは音声の取得を行います。使用時は周囲の人の許可を取って使用してください。</label>
+      </div>
+      <button class="btn-submit">登録する</button>
+    </div>
+
+    <div class="login-link">
+      すでにアカウントをお持ちの方は <a href="mock-login.html">ログイン</a>
+    </div>
+
+  </div>
+</body>
+</html>

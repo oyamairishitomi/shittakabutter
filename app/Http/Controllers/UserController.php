@@ -54,6 +54,7 @@ class UserController extends Controller
         ]);
 
         $request->session()->flash('front.user_register_success', true);
+        //ブレードにフラッシュでフラグを送る
 
         return redirect('/login');
     }

@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>シッタカブッター @yield('title')</title>
-  @livewireStyles
+  <title>シッタカブッター - admin</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -14,6 +12,9 @@
       color: #a0c8a0;
       font-family: 'Courier New', 'Osaka-Mono', monospace;
       min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     body::before {
@@ -29,6 +30,15 @@
       z-index: 100;
     }
 
+    .container {
+      width: 100%;
+      max-width: 390px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
     .brand-en {
       font-size: 16px;
       color: #4caf50;
@@ -39,19 +49,27 @@
     .brand-ja {
       font-size: 12px;
       color: #5a8a5a;
+      margin-top: 4px;
       font-family: -apple-system, 'Hiragino Sans', sans-serif;
     }
 
-    .logout-btn {
+    .header h1 {
+      font-size: 14px;
+      color: #4caf50;
+      font-weight: normal;
+      letter-spacing: 0.1em;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #1a2e1a;
+    }
+    .header h1::before { content: '> '; color: #2d5a2d; }
+
+    .header .sub {
       font-size: 11px;
       color: #2d5a2d;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
+      margin-top: 6px;
       letter-spacing: 0.05em;
     }
-    .logout-btn:hover { color: #4caf50; }
 
     .form-area {
       background: #0a0f0a;
@@ -86,7 +104,7 @@
     .form-input:focus { border-color: #2d5a2d; }
     .form-input::placeholder { color: #1e3a1e; }
 
-    .error-msg {
+    .error {
       font-size: 12px;
       color: #ef4444;
       padding: 10px 14px;
@@ -94,16 +112,7 @@
       border-radius: 3px;
       background: #0f0808;
     }
-    .error-msg::before { content: '! '; }
-
-    .success-msg {
-      font-size: 12px;
-      color: #4caf50;
-      padding: 10px 14px;
-      border: 1px solid #1a2e1a;
-      border-radius: 3px;
-    }
-    .success-msg::before { content: '✓ '; }
+    .error::before { content: '! '; }
 
     .btn-submit {
       width: 100%;
@@ -121,10 +130,31 @@
     .btn-submit::before { content: '$ '; color: #2d5a2d; }
     .btn-submit:hover { background: #111f11; }
   </style>
-  @yield('styles')
 </head>
 <body>
-  @yield('contents')
-  @livewireScripts
+  <div class="container">
+
+    <div class="header">
+      <div class="brand-en">shittakabutter</div>
+      <div class="brand-ja">シッタカブッター</div>
+      <h1>admin login</h1>
+      <div class="sub">// 管理者専用ページ</div>
+    </div>
+
+    <!-- <div class="error">emailかパスワードに誤りがあります。</div> -->
+
+    <div class="form-area">
+      <div>
+        <label class="form-label">email</label>
+        <input class="form-input" type="text" placeholder="admin@example.com">
+      </div>
+      <div>
+        <label class="form-label">password</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <button class="btn-submit">ログイン</button>
+    </div>
+
+  </div>
 </body>
 </html>

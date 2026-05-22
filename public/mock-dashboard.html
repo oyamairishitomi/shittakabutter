@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>シッタカブッター</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #080c08;
+      color: #a0c8a0;
+      font-family: 'Courier New', 'Osaka-Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* うっすらスキャンライン */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.08) 3px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 390px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ヘッダー */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #1a2e1a;
+      padding-bottom: 12px;
+    }
+
+    .header h1 {
+      font-size: 15px;
+      font-weight: normal;
+      color: #4caf50;
+      letter-spacing: 0.1em;
+    }
+
+    .header h1::before { content: '> '; color: #2d5a2d; }
+
+    .logout-btn {
+      font-size: 11px;
+      color: #2d5a2d;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+    }
+    .logout-btn:hover { color: #4caf50; }
+
+    /* ステータス */
+    .status-area {
+      border: 1px solid #1a2e1a;
+      border-radius: 4px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #0a0f0a;
+    }
+
+    .status-line {
+      font-size: 14px;
+      color: #4caf50;
+      min-height: 18px;
+    }
+
+    .status-line.active { color: #ef4444; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 13px;
+      background: #4caf50;
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 3px;
+      border: 1px solid #1a2e1a;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      text-align: left;
+      transition: background 0.1s;
+    }
+
+    .btn::before { content: '$ '; color: #2d5a2d; }
+
+    .btn-start {
+      background: #0d1a0d;
+      color: #4caf50;
+      border-color: #2d5a2d;
+    }
+    .btn-start:hover { background: #111f11; }
+
+    .btn-stop {
+      background: #0a0f0a;
+      color: #4a7a4a;
+    }
+    .btn-stop:active { color: #ef4444; }
+
+    /* 用語集 */
+    .terms-label {
+      font-size: 13px;
+      color: #4caf50;
+      letter-spacing: 0.1em;
+    }
+    .terms-label::before { content: '// '; }
+
+    .terms-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card {
+      background: #0a0f0a;
+      border: 1px solid #1a2e1a;
+      border-left: 3px solid #2d5a2d;
+      border-radius: 2px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card:hover { border-left-color: #4caf50; }
+
+    .card-name {
+      font-size: 15px;
+      font-weight: bold;
+      color: #88d488;
+      letter-spacing: 0.05em;
+    }
+
+    .card-name::before { content: '['; color: #2d5a2d; }
+    .card-name::after  { content: ']'; color: #2d5a2d; }
+
+    .card-desc {
+      font-size: 14px;
+      color: #7aaa7a;
+      line-height: 1.7;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2px;
+    }
+
+    .card-date {
+      font-size: 11px;
+      color: #3a5a3a;
+    }
+
+    .card-delete {
+      font-size: 11px;
+      color: #3a5a3a;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+    }
+    .card-delete:hover { color: #ef4444; }
+
+    /* ページネーション */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding-bottom: 32px;
+      font-size: 12px;
+    }
+    .pagination a { color: #2d5a2d; text-decoration: none; }
+    .pagination a:hover { color: #4caf50; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <h1>shittakabutter</h1>
+      <button class="logout-btn">logout</button>
+    </div>
+
+    <div class="status-area">
+      <div class="status-line" id="statusLine">
+        ready<span class="cursor"></span>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-start" onclick="startRec()">知ったか開始</button>
+        <button class="btn btn-stop" onclick="stopRec()">知ったか終了</button>
+      </div>
+    </div>
+
+    <div class="terms-label">用語集</div>
+
+    <div class="terms-list">
+
+      <div class="card">
+        <div class="card-name">インフォームドコンセント</div>
+        <div class="card-desc">医療行為の前に患者へ十分な説明を行い、同意を得るプロセス。</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-22 10:30</span>
+          <button class="card-delete">delete</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-name">バイタルサイン</div>
+        <div class="card-desc">生命維持に関わる基本的な身体指標。体温・脈拍・血圧・呼吸数など。</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-22 10:30</span>
+          <button class="card-delete">delete</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-name">エビデンスベース</div>
+        <div class="card-desc">科学的根拠・研究データに基づいて判断・実践すること。</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-22 10:30</span>
+          <button class="card-delete">delete</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-name">モニタリング</div>
+        <div class="card-desc">状態を継続的に観察・記録・追跡すること。</div>
+        <div class="card-footer">
+          <span class="card-date">2026-05-22 10:30</span>
+          <button class="card-delete">delete</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pagination">
+      <a href="#">« prev</a>
+      <a href="#">next »</a>
+    </div>
+
+  </div>
+
+  <script>
+    function startRec() {
+      const s = document.getElementById('statusLine');
+      s.classList.add('active');
+      s.innerHTML = 'recording...<span class="cursor" style="background:#ef4444"></span>';
+    }
+
+    function stopRec() {
+      const s = document.getElementById('statusLine');
+      s.classList.remove('active');
+      s.innerHTML = 'analyzing...<span class="cursor"></span>';
+      setTimeout(() => {
+        s.innerHTML = 'done. ready<span class="cursor"></span>';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

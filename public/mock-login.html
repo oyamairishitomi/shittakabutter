@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>シッタカブッター @yield('title')</title>
-  @livewireStyles
+  <title>シッタカブッター - login</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -14,6 +12,9 @@
       color: #a0c8a0;
       font-family: 'Courier New', 'Osaka-Mono', monospace;
       min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     body::before {
@@ -29,29 +30,43 @@
       z-index: 100;
     }
 
+    .container {
+      width: 100%;
+      max-width: 390px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .brand-en {
-      font-size: 16px;
+      font-size: 20px;
       color: #4caf50;
       letter-spacing: 0.1em;
     }
     .brand-en::before { content: '> '; color: #2d5a2d; }
 
     .brand-ja {
-      font-size: 12px;
-      color: #5a8a5a;
+      font-size: 13px;
+      color: #7aaa7a;
+      letter-spacing: 0.05em;
       font-family: -apple-system, 'Hiragino Sans', sans-serif;
     }
 
-    .logout-btn {
-      font-size: 11px;
-      color: #2d5a2d;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      letter-spacing: 0.05em;
+    .brand-desc {
+      font-size: 13px;
+      color: #4a7a4a;
+      line-height: 1.8;
+      border-left: 2px solid #1a2e1a;
+      padding-left: 12px;
+      font-family: -apple-system, 'Hiragino Sans', sans-serif;
     }
-    .logout-btn:hover { color: #4caf50; }
 
     .form-area {
       background: #0a0f0a;
@@ -86,7 +101,7 @@
     .form-input:focus { border-color: #2d5a2d; }
     .form-input::placeholder { color: #1e3a1e; }
 
-    .error-msg {
+    .error {
       font-size: 12px;
       color: #ef4444;
       padding: 10px 14px;
@@ -94,16 +109,16 @@
       border-radius: 3px;
       background: #0f0808;
     }
-    .error-msg::before { content: '! '; }
+    .error::before { content: '! '; }
 
-    .success-msg {
+    .success {
       font-size: 12px;
       color: #4caf50;
       padding: 10px 14px;
       border: 1px solid #1a2e1a;
       border-radius: 3px;
     }
-    .success-msg::before { content: '✓ '; }
+    .success::before { content: '✓ '; }
 
     .btn-submit {
       width: 100%;
@@ -120,11 +135,53 @@
     }
     .btn-submit::before { content: '$ '; color: #2d5a2d; }
     .btn-submit:hover { background: #111f11; }
+
+    .register-link {
+      text-align: center;
+      font-size: 12px;
+      color: #3a5a3a;
+    }
+
+    .register-link a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+    .register-link a:hover { text-decoration: underline; }
   </style>
-  @yield('styles')
 </head>
 <body>
-  @yield('contents')
-  @livewireScripts
+  <div class="container">
+
+    <div class="brand">
+      <div class="brand-en">shittakabutter</div>
+      <div class="brand-ja">シッタカブッター</div>
+      <div class="brand-desc">
+        会議中にこっそり使える、カタカナ語・専門用語の即席解説ツール。<br>
+        録音するだけで、AIがわからない用語を自動で拾って一言で説明。<br>
+        知ったかぶりを、もっとスマートに。
+      </div>
+    </div>
+
+    <!-- エラー例（表示確認用） -->
+    <!-- <div class="error">emailかパスワードに誤りがあります。</div> -->
+    <!-- <div class="success">登録完了しました。</div> -->
+
+    <div class="form-area">
+      <div>
+        <label class="form-label">email</label>
+        <input class="form-input" type="text" placeholder="you@example.com">
+      </div>
+      <div>
+        <label class="form-label">password</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <button class="btn-submit">ログインする</button>
+    </div>
+
+    <div class="register-link">
+      アカウントをお持ちでない方は <a href="mock-register.html">会員登録</a>
+    </div>
+
+  </div>
 </body>
 </html>
