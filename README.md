@@ -1,58 +1,62 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# シッタカブッター
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+会議やビジネス会話で飛び交うカタカナ語・専門用語をリアルタイムで文字起こし・解説するWebアプリ。
 
-## About Laravel
+## 概要
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+「アジェンダ」「オンボーディング」「KPI」——会議中に知らない用語が出ても聞き返せない場面はよくある。  
+シッタカブッターは、その場で録音してAPIに投げるだけで、わからなかった用語を一覧で把握できるツール。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 機能
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **音声録音・文字起こし** — ブラウザからワンクリック録音、OpenAI Whisper APIで日本語文字起こし
+- **用語抽出・解説** — GPT-4oが文字起こし結果からカタカナ語・ビジネス用語を自動抽出し、一言解説を生成
+- **用語集のリアルタイム更新** — Livewireにより、ページリロードなしで用語カードを追加表示
+- **用語削除・ページネーション** — 用語ごとの削除、10件ごとのページング
+- **ユーザー認証** — 会員登録・ログイン・ログアウト（Laravel Breeze相当の独自実装）
+- **管理者機能** — 管理者ログイン・ユーザー一覧の閲覧
 
-## Learning Laravel
+## 技術スタック
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| カテゴリ | 技術 |
+|---|---|
+| バックエンド | PHP 8 / Laravel 11 |
+| フロントエンド | Livewire v4（リアルタイムUI更新） |
+| データベース | SQLite |
+| 外部API | OpenAI Whisper API（音声→テキスト）、GPT-4o（用語抽出） |
+| 認証 | Laravel 標準認証（独自実装） |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 工夫した点
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- **責務の分離** — 音声取得（`GetWordService`）・用語抽出（`GetMeanService`）をサービスクラスに切り出し、コントローラーをシンプルに保った
+- **Livewireによるリアクティブ更新** — `#[Computed]` で用語一覧を管理し、`#[On('termsUpdated')]` でJS側からのイベントを受け取って再描画。ページ全体のリロードを排除した
+- **セキュリティ** — 認証ミドルウェアによるルート保護、用語削除時の所有者チェック（他ユーザーの用語を削除できない）
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## ローカル環境での起動
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/oyamairishitomi/shittakabutter.git
+cd shittakabutter
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+`.env` に OpenAI APIキーを設定：
 
-## Contributing
+```
+OPENAI_API_KEY=your_api_key_here
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan serve
+```
 
-## Code of Conduct
+## 画面イメージ
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| 機能 | 説明 |
+|---|---|
+| ダッシュボード | 録音開始/終了ボタン、用語集一覧 |
+| 録音→解析 | 停止後にWhisper→GPT-4oが走り、用語カードが自動追加 |
+| 管理画面 | `/admin/login` から管理者としてユーザー一覧を確認可能 |
