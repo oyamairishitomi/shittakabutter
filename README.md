@@ -1,6 +1,7 @@
 # シッタカブッター
 
 **https://shittaka.1103.horse**
+※テスト　kouji@kouji.com / pass: koujikouji
 
 会議やビジネス会話で飛び交うカタカナ語・専門用語をリアルタイムで文字起こし・解説するWebアプリ。
 
